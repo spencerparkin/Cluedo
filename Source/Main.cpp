@@ -27,5 +27,10 @@ int main(int argc, char** argv)
 	//   Then later if you find out that person B (!= A) has x, then revise to: person A says (y,z) doesn't work.
 	//   Then later if you find out that person C (!= A) has z, then revise to: person A said y doesn't work.
 
+	// Also not your turn:
+	//   Person A says I can't refute (x,y,z).
+	//   Then person A does not have x, y, or z.
+	//   If earlier person A refuted (x,y,w), then person A has w.
+
 	return 0;
 }
