@@ -2,24 +2,27 @@
 
 int main(int argc, char** argv)
 {
-	// For each person (including the solution) we track...
-	//   1) What cards they possibly have, and...
-	//   2) What cards we know they have.
-	//   When the number of remaining possible cards equals the number of unknown cards (see #4 below), then we know all their cards.  This triggers #2 below.
-	//   This is because we know the total number of cards in their hand from the start.
+	// Your memory is in two parts A and B...
+	// 
+	// A: For each card you track:
+	//   1) The set of possible owners, or
+	//   2) The known onwer.
 	//
-	// For each turn (even if it is not our turn)...
-	//   1) We log any refute made, but store it in fully reduced form, unless it reduces to 1 card, in which case go to (#2).
-	//   2) Whenever we learn where a card actually is, we reduce all logged refutes as a consequence of this new information.
-	//   3) If a refute reduces to 1 card, then we know where that card is, and we repeat the reduction (#2).  (Append to the queue.)
-	//   4) We use any failure to refute as another way to reduce the set of possible cards anyone has and again, if we learn where a card is, then (#2).
-	//   5) Being dealt a hand triggers this algorithm as well, because we're learning what cards we have.
+	// B: You also track all refutes.  (e.g., Sally disproved an accusation.  We're not told how, but we know she did.)
 	//
-	// Lastly, treat the solution as a "player".  The only difference is that this "player" is never queried to refute.
-
-	// Knowledge of where a card is goes on a queue to be processed.
-	// The algorithm proceeds until the queue in empty.
-	// Once empty, check to see if we have the solution.
+	// Anytime the state of A changes, you can reduce B.
+	// Reducing B can change the state of A.
+	//
+	// When a failure to refute occurs, you can update A.
+	//
+	// A refute is reduced when we know that the disprover doesn't have a card in the disproved accusation.
+	// When a refute reduces to one card, then we know the disprover has that card.
+	//
+	// And of course, we can change A whenever we make an accusation and either receive a refute of it or someone fails to refute it.
+	//
+	// A note about updating A: We also know the total number of cards in everyone's hand, and that never changes.
+	// Therefore, if the total number of remaining unknown cards in a person's hand equals the total number of possible
+	// cards the person is assigned to, then we can deduce that they have those cards.
 
 	return 0;
 }
