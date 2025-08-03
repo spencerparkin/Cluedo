@@ -8,22 +8,6 @@
 #define CLUE_BOARD_WIDTH			24
 #define CLUE_BOARD_HEIGHT			25
 
-enum
-{
-	UU,			// Unused
-	KN,			// Kitchen
-	DR,			// Dining Room
-	LG,			// Lounge
-	BR,			// Ball Room
-	CR,			// Center
-	HL,			// Hall
-	CY,			// Conservatory
-	LR,			// Billiard Room
-	LY,			// Library
-	SY,			// Study
-	HW			// Hall Way
-};
-
 enum Zone
 {
 	Unused,
@@ -61,9 +45,9 @@ enum Weapon
 };
 
 /**
-	* This class represents the playing field, its constraints, and where the
-	* players are located on that field.
-	*/
+ * This class represents the playing field, its constraints, and where the
+ * players are located on that field.
+ */
 class BoardGraph
 {
 public:
