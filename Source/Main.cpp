@@ -1,36 +1,21 @@
 #include "Main.h"
-#include "BoardGraph.h"
 
 int main(int argc, char** argv)
 {
-	BoardGraph boardGraph;
-
-	boardGraph.Regenerate();
-
-	// The goal here initially is to simulate the game with the most basic statagy.
-	// Specifically, a player does nothing more than try to get to every room and
-	// elimate possabilities based only on what information they get by making
-	// accusations.  The goal then is to improve upon this basic stratagy by making
-	// a player that observes every other player's turn, gleaning what additional
-	// information can be gathered in doing so.  For example, if I observe a player
-	// make an accusation that is disproved, then I don't know how it was disproved,
-	// unless I hold in my hand two of the three elements of the accusation.  This
-	// then lets me know what card was in the disprover's hand even though it was
-	// not my turn to play, and even though such information is not shared with me.
-	// There are probably many other ways to get information when it is not my turn.
-	// I think the general idea is to not just eliminate possabilities, but also to
-	// learn what cards are in other people's hands.
-
-	// Not our turn:
-	//   Person A says (x,y,z) doesn't work.
-	//   (Remember all such occurrances.)
-	//   Then later if you find out that person B (!= A) has x, then revise to: person A says (y,z) doesn't work.
-	//   Then later if you find out that person C (!= A) has z, then revise to: person A said y doesn't work.
-
-	// Also not your turn:
-	//   Person A says I can't refute (x,y,z).
-	//   Then person A does not have x, y, or z.
-	//   If earlier person A refuted (x,y,w), then person A has w.
+	// For each person (including the solution) we track...
+	//   1) What cards they possibly have, and...
+	//   2) What cards we know they have.
+	//   When the number of remaining possible cards equals the number of unknown cards (see #4 below), then we know all their cards.  This triggers #2 below.
+	//   This is because we know the total number of cards in their hand from the start.
+	//
+	// For each turn (even if it is not our turn)...
+	//   1) We log any refute made, but store it in fully reduced form, unless it reduces to 1 card, in which case go to (#2).
+	//   2) Whenever we learn where a card actually is, we reduce all logged refutes as a consequence of this new information.
+	//   3) If a refute reduces to 1 card, then we know where that card is, and we repeat the reduction (#2).
+	//   4) We use any failure to refute as another way to reduce the set of possible cards anyone has and again, if we learn where a card is, then (#2).
+	//   5) Being dealt a hand triggers this algorithm as well, because we're learning what cards we have.
+	//
+	// Lastly, treat the solution as a "player".  The only difference is that this "player" is never queried to refute.
 
 	return 0;
 }
