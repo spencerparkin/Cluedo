@@ -21,5 +21,11 @@ int main(int argc, char** argv)
 	// I think the general idea is to not just eliminate possabilities, but also to
 	// learn what cards are in other people's hands.
 
+	// Not our turn:
+	//   Person A says (x,y,z) doesn't work.
+	//   (Remember all such occurrances.)
+	//   Then later if you find out that person B (!= A) has x, then revise to: person A says (y,z) doesn't work.
+	//   Then later if you find out that person C (!= A) has z, then revise to: person A said y doesn't work.
+
 	return 0;
 }
