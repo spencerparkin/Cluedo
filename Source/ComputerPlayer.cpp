@@ -7,7 +7,3 @@ ComputerPlayer::ComputerPlayer(const std::string& name) : Player(name)
 /*virtual*/ ComputerPlayer::~ComputerPlayer()
 {
 }
-
-/*virtual*/ void ComputerPlayer::Participate(CluedoGame* game)
-{
-}
