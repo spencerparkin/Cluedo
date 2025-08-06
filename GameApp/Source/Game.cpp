@@ -4,10 +4,16 @@
 
 Game::Game()
 {
+	this->correctAccusation = Accusation{};
 }
 
 /*virtual*/ Game::~Game()
 {
+}
+
+BoardGraph* Game::GetBoardGraph()
+{
+	return &this->boardGraph;
 }
 
 bool Game::AddPlayer(std::shared_ptr<Player> player)
@@ -22,6 +28,8 @@ bool Game::AddPlayer(std::shared_ptr<Player> player)
 
 void Game::Play()
 {
+	this->boardGraph.Regenerate();
+
 	std::vector<Card> cardArray;
 	Card::GenerateDeck(cardArray);
 	Card::ShuffleDeck(cardArray);

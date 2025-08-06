@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Card.h"
+#include "BoardGraph.h"
 #include <memory>
 
 class Player;
@@ -23,9 +24,11 @@ public:
 	bool AddPlayer(std::shared_ptr<Player> player);
 	void Play();
 
+	BoardGraph* GetBoardGraph();
+
 private:
 
 	Accusation correctAccusation;
-
+	BoardGraph boardGraph;
 	std::vector<std::shared_ptr<Player>> playerArray;
 };

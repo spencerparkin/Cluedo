@@ -28,69 +28,61 @@ void Canvas::OnPaint(wxPaintEvent& event)
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	double aspectRatio = float(viewport[2]) / float(viewport[3]);
 
-	/*
-	Cluedo::BoardGraph* boardGraph = wxGetApp().GetBoardGraph();
-	Cluedo::Box2D worldBox = boardGraph->GetBoundingBox();
-	worldBox.AddMargin(1.0);
-	worldBox.MinimallyExpandToMatchAspectRatio(aspectRatio);
+	BoardGraph* boardGraph = wxGetApp().GetGame()->GetBoardGraph();
+	std::lock_guard<std::mutex> lock(boardGraph->GetBoardGraphMutex());
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(worldBox.minCorner.x, worldBox.maxCorner.x, worldBox.minCorner.y, worldBox.maxCorner.y);
-	*/
+	if (boardGraph->IsGenerated())
+	{
+		Box2D worldBox = boardGraph->GetBoundingBox();
+		worldBox.AddMargin(1.0);
+		worldBox.MinimallyExpandToMatchAspectRatio(aspectRatio);
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluOrtho2D(worldBox.minCorner.x, worldBox.maxCorner.x, worldBox.minCorner.y, worldBox.maxCorner.y);
 
-	/*
-	glBegin(GL_QUADS);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 
-	boardGraph->ForAllNodes([this](const Cluedo::BoardGraph::Node* node) -> bool
+		glBegin(GL_QUADS);
+
+		boardGraph->ForAllNodes([this](const BoardGraph::Node* node) -> bool
+			{
+				this->RenderBoardNodeQuad(node);
+				return true;
+			});
+
+		glColor3f(0.0f, 0.0f, 0.0f);
+
+		boardGraph->ForAllNodes([this](const BoardGraph::Node* node) -> bool
+			{
+				this->RenderBoardNodeBorder(node);
+				return true;
+			});
+
+		glEnd();
+
+		for (std::shared_ptr<BoardGraph::Token> token : boardGraph->GetTokenArray())
 		{
-			this->RenderBoardNodeQuad(node);
-			return true;
-		});
-
-	glColor3f(0.0f, 0.0f, 0.0f);
-
-	boardGraph->ForAllNodes([this](const Cluedo::BoardGraph::Node* node) -> bool
-		{
-			this->RenderBoardNodeBorder(node);
-			return true;
-		});
-
-	glEnd();
-
-	boardGraph->ForAllNodes([this](const Cluedo::BoardGraph::Node* node) -> bool
-		{
-			this->RenderOccupantIfAny(node);
-			return true;
-		});
-	*/
+			this->RenderToken(token.get());
+		}
+	}
 
 	glFlush();
 
 	this->SwapBuffers();
 }
 
-/*
-void Canvas::RenderBoardNodeQuad(const Cluedo::BoardGraph::Node* node)
+void Canvas::RenderBoardNodeQuad(const BoardGraph::Node* node)
 {
-	const Cluedo::Vector2D& location = node->GetLocation();
+	const Vector2D& location = node->GetLocation();
 
-	if (node->GetZone() == Cluedo::Zone::Unused)
-		return;
-	else if(node->GetZone() == Cluedo::Zone::Hallway)
-	{
-		if (int(location.x + location.y) % 2 == 0)
-			glColor3f(1.0f, 1.0f, 1.0f);
-		else
-			glColor3f(0.5f, 0.5f, 0.5f);
-	}
-	else if (node->IsRoom())
-	{
+	if(node->IsRoom())
 		glColor3f(0.4f, 0.6f, 0.8f);
-	}
+	else if (int(location.x + location.y) % 2 == 0)
+		glColor3f(1.0f, 1.0f, 1.0f);
+	else
+		glColor3f(0.5f, 0.5f, 0.5f);
 
 	glVertex2d(location.x - 0.5, location.y - 0.5);
 	glVertex2d(location.x + 0.5, location.y - 0.5);
@@ -98,9 +90,9 @@ void Canvas::RenderBoardNodeQuad(const Cluedo::BoardGraph::Node* node)
 	glVertex2d(location.x - 0.5, location.y + 0.5);
 }
 
-void Canvas::RenderBoardNodeBorder(const Cluedo::BoardGraph::Node* node)
+void Canvas::RenderBoardNodeBorder(const BoardGraph::Node* node)
 {
-	std::vector<const Cluedo::BoardGraph::Node*> adjacentNodeArray;
+	std::vector<const BoardGraph::Node*> adjacentNodeArray;
 	node->GetAdjacencies(adjacentNodeArray);
 
 	for (auto* adjacentNode : adjacentNodeArray)
@@ -108,16 +100,16 @@ void Canvas::RenderBoardNodeBorder(const Cluedo::BoardGraph::Node* node)
 		if (node->IsPathway(adjacentNode))
 			continue;
 		
-		Cluedo::Vector2D point = (node->GetLocation() + adjacentNode->GetLocation()) / 2.0;
-		Cluedo::Vector2D minorAxis = point - node->GetLocation();
-		Cluedo::Vector2D majorAxis = minorAxis.RotatedCCW90();
-		Cluedo::Vector2D endPointA = point + majorAxis;
-		Cluedo::Vector2D endPointB = point - majorAxis;
-		Cluedo::Vector2D thicknessVector = minorAxis.Normalized() * 0.05;
-		Cluedo::Vector2D vertexA = endPointA - thicknessVector;
-		Cluedo::Vector2D vertexB = endPointB - thicknessVector;
-		Cluedo::Vector2D vertexC = endPointB + thicknessVector;
-		Cluedo::Vector2D vertexD = endPointA + thicknessVector;
+		Vector2D point = (node->GetLocation() + adjacentNode->GetLocation()) / 2.0;
+		Vector2D minorAxis = point - node->GetLocation();
+		Vector2D majorAxis = minorAxis.RotatedCCW90();
+		Vector2D endPointA = point + majorAxis;
+		Vector2D endPointB = point - majorAxis;
+		Vector2D thicknessVector = minorAxis.Normalized() * 0.05;
+		Vector2D vertexA = endPointA - thicknessVector;
+		Vector2D vertexB = endPointB - thicknessVector;
+		Vector2D vertexC = endPointB + thicknessVector;
+		Vector2D vertexD = endPointA + thicknessVector;
 
 		glVertex2d(vertexA.x, vertexA.y);
 		glVertex2d(vertexB.x, vertexB.y);
@@ -126,22 +118,18 @@ void Canvas::RenderBoardNodeBorder(const Cluedo::BoardGraph::Node* node)
 	}
 }
 
-void Canvas::RenderOccupantIfAny(const Cluedo::BoardGraph::Node* node)
+void Canvas::RenderToken(const BoardGraph::Token* token)
 {
-	const Cluedo::BoardGraph::Token* token = node->GetOccupant();
-	if (!token)
-		return;
-
 	// Calculate vertices.
-	const Cluedo::Vector2D& location = token->GetLocation();
+	const Vector2D& location = token->GetLocation();
 	double radius = 0.45;
 	const int numSegments = 32;
-	std::vector<Cluedo::Vector2D> vertexArray;
+	std::vector<Vector2D> vertexArray;
 	for (int i = 0; i < numSegments; i++)
 	{
-		Cluedo::Vector2D delta;
+		Vector2D delta;
 		delta.Compose(radius, (2.0 * M_PI) * double(i) / double(numSegments));
-		Cluedo::Vector2D vertex = location + delta;
+		Vector2D vertex = location + delta;
 		vertexArray.push_back(vertex);
 	}
 
@@ -153,7 +141,7 @@ void Canvas::RenderOccupantIfAny(const Cluedo::BoardGraph::Node* node)
 	glVertex2d(location.x, location.y);
 	for (int i = 0; i <= numSegments; i++)
 	{
-		const Cluedo::Vector2D& vertex = vertexArray[i % numSegments];
+		const Vector2D& vertex = vertexArray[i % numSegments];
 		glVertex2d(vertex.x, vertex.y);
 	}
 	glEnd();
@@ -163,12 +151,11 @@ void Canvas::RenderOccupantIfAny(const Cluedo::BoardGraph::Node* node)
 	glColor3d(0.0, 0.0, 0.0);
 	for (int i = 0; i < numSegments; i++)
 	{
-		const Cluedo::Vector2D& vertex = vertexArray[i];
+		const Vector2D& vertex = vertexArray[i];
 		glVertex2d(vertex.x, vertex.y);
 	}
 	glEnd();
 }
-*/
 
 void Canvas::OnSize(wxSizeEvent& event)
 {

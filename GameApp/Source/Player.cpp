@@ -15,6 +15,11 @@ const std::string& Player::GetName() const
 	return this->name;
 }
 
+/*virtual*/ void Player::TakePositionOfToken(std::shared_ptr<BoardGraph::Token> token)
+{
+	this->token = token;
+}
+
 /*virtual*/ void Player::BeIntroducedTo(const Player* player)
 {
 }

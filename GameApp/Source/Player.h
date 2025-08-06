@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Card.h"
+#include "BoardGraph.h"
 #include <string>
 
 class Player
@@ -14,6 +15,7 @@ public:
 	const std::string& GetName() const;
 
 	virtual void TakePossessionOfCard(const Card& card) = 0;
+	virtual void TakePositionOfToken(std::shared_ptr<BoardGraph::Token> token);
 	virtual int GetTotalCardsInPossession() const = 0;
 	virtual void BeIntroducedTo(const Player* player);
 	virtual void PrepareForGame();
@@ -24,6 +26,9 @@ public:
 	virtual void PlayerCouldNotRefuteAccusation(const Player* player, const Accusation& accusation, const Player* accuser);
 	virtual void AccusationDisproved(const Accusation& accusation, const Player* disprover, const Card* cardOwnedByDisprover);
 	virtual void AccusationCouldNotBeRefutedByAnyone(const Accusation& accusation, const Player* accuser);
+
+protected:
+	std::shared_ptr<BoardGraph::Token> token;
 
 private:
 	bool isDisqualified;

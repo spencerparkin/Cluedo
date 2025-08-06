@@ -27,3 +27,8 @@ Application::Application()
 {
 	return 0;
 }
+
+Game* Application::GetGame()
+{
+	return &this->game;
+}

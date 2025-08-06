@@ -17,6 +17,12 @@ set(CLUEDO_SOURCES
 	Source/Game.h
 	Source/Card.cpp
 	Source/Card.h
+	Source/BoardGraph.cpp
+	Source/BoardGraph.h
+	Source/Math/Vector2D.cpp
+	Source/Math/Vector2D.h
+	Source/Math/Box2D.cpp
+	Source/Math/Box2D.h
 )
 
 source_group("Sources" TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${CLUEDO_SOURCES})
