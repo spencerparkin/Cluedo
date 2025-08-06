@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game.h"
+#include "GameThread.h"
 #include <wx/app.h>
 #include <mutex>
 
@@ -15,13 +15,13 @@ public:
 	virtual bool OnInit() override;
 	virtual int OnExit() override;
 
-	Game* GetGame();
+	GameThread* GetGameThread();
 
 private:
 
 	Frame* frame;
 
-	Game game;
+	GameThread gameThread;
 };
 
 wxDECLARE_APP(Application);

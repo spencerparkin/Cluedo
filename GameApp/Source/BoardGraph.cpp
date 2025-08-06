@@ -104,6 +104,8 @@ bool BoardGraph::IsGenerated() const
 
 void BoardGraph::Regenerate()
 {
+	std::lock_guard<std::mutex> lock(this->boardGraphMutex);
+
 	this->tokenArray.clear();
 	this->nodeArray.clear();
 

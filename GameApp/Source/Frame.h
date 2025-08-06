@@ -13,10 +13,12 @@ public:
 	enum
 	{
 		ID_Exit = wxID_HIGHEST,
+		ID_NewGame,
 		ID_About
 	};
 
 	void OnExit(wxCommandEvent& event);
+	void OnNewGame(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
 	void OnUpdateUI(wxUpdateUIEvent& event);
 

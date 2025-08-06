@@ -28,7 +28,7 @@ void Canvas::OnPaint(wxPaintEvent& event)
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	double aspectRatio = float(viewport[2]) / float(viewport[3]);
 
-	BoardGraph* boardGraph = wxGetApp().GetGame()->GetBoardGraph();
+	BoardGraph* boardGraph = wxGetApp().GetGameThread()->GetGame()->GetBoardGraph();
 	std::lock_guard<std::mutex> lock(boardGraph->GetBoardGraphMutex());
 
 	if (boardGraph->IsGenerated())
@@ -64,6 +64,7 @@ void Canvas::OnPaint(wxPaintEvent& event)
 
 		for (std::shared_ptr<BoardGraph::Token> token : boardGraph->GetTokenArray())
 		{
+			//token->Animate(deltaTime);
 			this->RenderToken(token.get());
 		}
 	}

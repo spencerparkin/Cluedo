@@ -25,10 +25,13 @@ Application::Application()
 
 /*virtual*/ int Application::OnExit()
 {
+	if (this->gameThread.IsRunning())
+		this->gameThread.Join();
+
 	return 0;
 }
 
-Game* Application::GetGame()
+GameThread* Application::GetGameThread()
 {
-	return &this->game;
+	return &this->gameThread;
 }

@@ -17,6 +17,10 @@ set(CLUEDO_SOURCES
 	Source/Game.h
 	Source/Card.cpp
 	Source/Card.h
+	Source/Thread.cpp
+	Source/Thread.h
+	Source/GameThread.cpp
+	Source/GameThread.h
 	Source/BoardGraph.cpp
 	Source/BoardGraph.h
 	Source/Math/Vector2D.cpp
