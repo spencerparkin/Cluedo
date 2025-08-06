@@ -37,7 +37,7 @@ target_compile_definitions(Cluedo PRIVATE
 	_USE_MATH_DEFINES
 )
 
-target_link_libraries(ClueGameClient
+target_link_libraries(Cluedo
 	wx::core
 	wx::base
 	wx::net

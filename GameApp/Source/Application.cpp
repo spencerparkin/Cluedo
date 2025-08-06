@@ -27,8 +27,3 @@ Application::Application()
 {
 	return 0;
 }
-
-Cluedo::BoardGraph* Application::GetBoardGraph()
-{
-	return this->gameState.GetBoardGraph();
-}

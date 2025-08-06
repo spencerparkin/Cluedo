@@ -12,14 +12,10 @@ public:
 
 	enum
 	{
-		ID_Connect = wxID_HIGHEST,
-		ID_Disconnect,
-		ID_Exit,
+		ID_Exit = wxID_HIGHEST,
 		ID_About
 	};
 
-	void OnConnect(wxCommandEvent& event);
-	void OnDisconnect(wxCommandEvent& event);
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
 	void OnUpdateUI(wxUpdateUIEvent& event);

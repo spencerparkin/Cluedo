@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GameState.h"
 #include <wx/app.h>
 
 class Frame;
@@ -14,11 +13,7 @@ public:
 	virtual bool OnInit() override;
 	virtual int OnExit() override;
 
-	Cluedo::BoardGraph* GetBoardGraph();
-
 private:
-
-	Cluedo::GameState gameState;
 
 	Frame* frame;
 };

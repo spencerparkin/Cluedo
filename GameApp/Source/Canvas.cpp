@@ -28,6 +28,7 @@ void Canvas::OnPaint(wxPaintEvent& event)
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	double aspectRatio = float(viewport[2]) / float(viewport[3]);
 
+	/*
 	Cluedo::BoardGraph* boardGraph = wxGetApp().GetBoardGraph();
 	Cluedo::Box2D worldBox = boardGraph->GetBoundingBox();
 	worldBox.AddMargin(1.0);
@@ -36,10 +37,12 @@ void Canvas::OnPaint(wxPaintEvent& event)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(worldBox.minCorner.x, worldBox.maxCorner.x, worldBox.minCorner.y, worldBox.maxCorner.y);
+	*/
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	/*
 	glBegin(GL_QUADS);
 
 	boardGraph->ForAllNodes([this](const Cluedo::BoardGraph::Node* node) -> bool
@@ -63,12 +66,14 @@ void Canvas::OnPaint(wxPaintEvent& event)
 			this->RenderOccupantIfAny(node);
 			return true;
 		});
+	*/
 
 	glFlush();
 
 	this->SwapBuffers();
 }
 
+/*
 void Canvas::RenderBoardNodeQuad(const Cluedo::BoardGraph::Node* node)
 {
 	const Cluedo::Vector2D& location = node->GetLocation();
@@ -163,6 +168,7 @@ void Canvas::RenderOccupantIfAny(const Cluedo::BoardGraph::Node* node)
 	}
 	glEnd();
 }
+*/
 
 void Canvas::OnSize(wxSizeEvent& event)
 {
