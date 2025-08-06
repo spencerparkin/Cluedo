@@ -21,7 +21,7 @@ set(CLUEDO_SOURCES
 
 source_group("Sources" TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${CLUEDO_SOURCES})
 
-add_executable(Cluedo
+add_executable(Cluedo WIN32
 	${CLUEDO_SOURCES}
 	${CMAKE_CURRENT_SOURCE_DIR}/wx_dpi_aware_pmv2.manifest
 )
@@ -37,9 +37,9 @@ target_compile_definitions(Cluedo PRIVATE
 	_USE_MATH_DEFINES
 )
 
-#target_link_libraries(ClueGameClient
-#	wx::core
-#	wx::base
-#	wx::net
-#	wx::gl
-#)
+target_link_libraries(ClueGameClient
+	wx::core
+	wx::base
+	wx::net
+	wx::gl
+)
